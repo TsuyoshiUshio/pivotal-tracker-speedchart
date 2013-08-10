@@ -18,7 +18,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+  create .speedchart file
+
+    token :  'pivotal tracker api-token of you'
+    project_id : project_id of your project in pivotal tracker
+
+  then type this
+
+    $ speedchart
+
 
 ## Contributing
 
@@ -27,3 +35,10 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+## Reference
+
+I use this guy's code about spreadsheet(exce_base.rb). Thank you!
+
+http://blog.livedoor.jp/sasata299/archives/51351663.html
