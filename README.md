@@ -1,6 +1,6 @@
 # Pivotal::Tracker::Speedchart
 
-TODO: Write a gem description
+TODO: Now under construction
 
 ## Installation
 

@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'pivotal-tracker-speedchart"
+
+include Pivotal::Tracker::Speedchart
+
+create_speed_chart
+create_message_of_speed_chart
+story_state_of_today
+
+
