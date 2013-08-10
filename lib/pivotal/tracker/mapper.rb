@@ -28,9 +28,9 @@ module Pivotal
         @@project.stories.all.select{|x| (x.story_type == "feature") && (x.current_state != "unscheduled")}
       end
 
-      # ステートに応じたストーリを取得する
-      # @param [String] ストーリのステート  unstarted, finished, delivered, accepted から選択
-      # @return 特定のステートのStory
+      # get stories depend on the state
+      # @param [String] state of story (unstarted/finished/delivered/accepted)
+      # @return [Array<PivotalTracker::Story>] stories on the backlog selected by state
       def find_by_state_stories(state)
         current_stories.select{|x| x.current_state == state}
       end
