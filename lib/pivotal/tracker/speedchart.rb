@@ -11,7 +11,8 @@ module Pivotal
     # @author Tsuyoshi Ushio
     module Speedchart
       include Pivotal::Tracker::Mapper
-      include Pivotal::Tracker::ExcelBase
+      include ExcelBase
+      include Spreadsheet
 
       # Excelにストーリのサマリを作成する（スピードチャートの作成）
       # 現状では、artifactディレクトリの下のspeed_chart.xlsが出来るようになっている

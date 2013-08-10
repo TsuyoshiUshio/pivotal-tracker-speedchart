@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'pivotal-tracker-speedchart"
+require "pivotal/tracker/speedchart"
 
 include Pivotal::Tracker::Speedchart
 

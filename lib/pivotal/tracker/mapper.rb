@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 require 'pivotal-tracker'
+require 'yaml'
 
 module Pivotal
   module Tracker
