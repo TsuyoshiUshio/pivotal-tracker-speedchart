@@ -16,9 +16,25 @@ module Pivotal
           puts "Please create config file '.speedchart'"
           exit -1
         end
-        PivotalTracker::Client.token = config['token']
-        @@project = PivotalTracker::Project.find(config['project_id'])
-        @@project_started_at = config['started_at']
+
+        begin
+          PivotalTracker::Client.token = config['token']
+          @@project = PivotalTracker::Project.find(config['project_id'])
+        rescue RestClient::Unauthorized
+          puts "Wrong token. please check out .speedchart"
+          exit -1
+        rescue RestClient::ResourceNotFound
+          puts "Wrong project_id. please check out .speedchart"
+          exit -1
+        end
+
+          @@project_started_at = config['started_at']
+
+          unless @@project_started_at.class == Date
+           puts "Wrong started_at. please check out .speedchart"
+           exit -1
+          end
+
         super
       end
 

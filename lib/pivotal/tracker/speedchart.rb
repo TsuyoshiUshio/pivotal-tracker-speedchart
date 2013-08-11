@@ -69,12 +69,12 @@ module Pivotal
         puts "finished    :"+find_by_state_stories("finished").size.to_s
         puts "delivered   :"+find_by_state_stories("delivered").size.to_s
         puts "accepted    :"+find_by_state_stories("accepted").size.to_s
-        puts "---------------------"
+        puts "-------------------------"
       end
 
       # Message of generation
       def create_message_of_speed_chart
-        puts "---------------------"
+        puts "-------------------------"
         puts "Speed Chart Generator ver1.0 "
         puts "'speed_chart.xls' was successfully generated."
         puts "Lets create speedchart using line graph!"
