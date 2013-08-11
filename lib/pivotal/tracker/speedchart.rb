@@ -14,12 +14,12 @@ module Pivotal
       include ExcelBase
       include Spreadsheet
 
-      # Excelにストーリのサマリを作成する（スピードチャートの作成）
-      # 現状では、artifactディレクトリの下のspeed_chart.xlsが出来るようになっている
-      # @param year [Integer] 作成開始年
-      # @param month [Integer] 開始月
-      # @param date [Integer] 開始日
-      def create_excel_by_story_summary(year, month, date)
+      # Creates project summary for speed chart
+      # generates speed_chart.xls on current directory
+      # @param year [Integer] started year
+      # @param month [Integer] stared month
+      # @param day [Integer] stared day
+      def create_excel_by_story_summary(year, month, day)
 
         xls_file_name =  'speed_chart.xls'
 
@@ -27,45 +27,42 @@ module Pivotal
         book = Spreadsheet::Workbook.new
         sheet = book.create_worksheet_with_name Date.today.to_s
         sheet.row(0).make_title ["Date", "total", "accepted", "todo"]
-        summrize_stories(year, month, date).each_with_index do |story_summary, i|
+        summrize_stories(year, month, day).each_with_index do |story_summary, i|
           sheet.row(i+1).add_data story_summary
         end
         book.write xls_file_name
       end
 
-      # スピードチャートの作成
-      # 現状では、artifactディレクトリの下のspeed_chart.xlsが出来るようになっている
-      # PivotalTrackerに登録された最初の日付から、現在までのチャートが作られる。
-      # プロジェクト毎に開始日時を設定してください。
+      # Generates speed_chart.xls on current directory
+      # From the first date of the project to today.
       def create_speed_chart
-        create_excel_by_story_summary(2013, 6, 1)
+        create_excel_by_story_summary(project_started_at.year, project_started_at.month, project_started_at.day)
       end
 
-      # Excelにスピードチャートを作成する
-      # 指定した日付から始まり、現在日までのデータが作成される
-      # 現状では、artifactディレクトリの下のspeed_chart.xlsが出来るようになっている
-      # @param year [Integer] 作成開始年
-      # @param month [Integer] 開始月
-      # @param date [Integer] 開始日
-      def create_speed_chart_with_date(year, month, date)
-        create_excel_by_story_summary(year, month, date)
+      # Generates speed_chart.xls on current directory
+      # Compare with create_speed_chart, you can specify stated date
+      # @param year [Integer] started year
+      # @param month [Integer] started month
+      # @param day [Integer] started day
+      def create_speed_chart_with_date(year, month, day)
+        create_excel_by_story_summary(year, month, day)
       end
 
 
-      # 現在のストーリのダンプを表示する
-      # ストーリの詳細が見れる
+      # Shows all story detail on the backlog
+      #
       def current_story_dump
         current_stories.each{|story|
           puts story.story_type + ":" + story.name + ":" + story.current_state + ":" + story.created_at.to_s + ":" + story.created_at.class.to_s + ":" + story.accepted_at.to_s  + ":" + story.url
         }
       end
 
-      # 本日のストーリ状況の表示
+      # Current project status of today.
       def story_state_of_today
-        puts "---------------------"
-        puts "本日のストーリ状況"
+        puts "-------------------------"
+        puts "Project Status"
         puts Time.now.to_s
-        puts "---------------------"
+        puts "-------------------------"
         puts "total       :"+current_stories.size.to_s
         puts "unstareted  :"+find_by_state_stories("unstarted").size.to_s
         puts "started     :"+find_by_state_stories("started").size.to_s
@@ -75,12 +72,12 @@ module Pivotal
         puts "---------------------"
       end
 
-      # Speed Chart生成メッセージ
+      # Message of generation
       def create_message_of_speed_chart
         puts "---------------------"
-        puts " Speed Chart Generator ver1.0 "
-        puts "Speed Chartが artifcats/speed_chart.xlsに作成されました"
-        puts "折れ線グラフを使ってプロジェクトの状況を見てみましょう"
+        puts "Speed Chart Generator ver1.0 "
+        puts "'speed_chart.xls' was successfully generated."
+        puts "Lets create speedchart using line graph!"
         puts ""
       end
 

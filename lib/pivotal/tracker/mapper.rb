@@ -5,7 +5,7 @@ require 'yaml'
 
 module Pivotal
   module Tracker
-    # Mapping to the outer resource
+    # Mapper of outer resource
     # This version only for Pivotal Tracker
     # @author Tsuyoshi Ushio
     module  Mapper
@@ -18,63 +18,68 @@ module Pivotal
         end
         PivotalTracker::Client.token = config['token']
         @@project = PivotalTracker::Project.find(config['project_id'])
+        @@project_started_at = config['started_at']
         super
       end
 
-      # get stories on the BackLog
+      def project_started_at
+        @@project_started_at
+      end
+
+      # Returns stories on the BackLog
       # @return [Array<PivotalTracker::Story>] stories on the backlog
       def current_stories
-        # typeがfeatureかつ、unscheduled以外
+        # type = feature and not unscheduled
         @@project.stories.all.select{|x| (x.story_type == "feature") && (x.current_state != "unscheduled")}
       end
 
-      # get stories depend on the state
+      # Return stories match the state
       # @param [String] state of story (unstarted/finished/delivered/accepted)
       # @return [Array<PivotalTracker::Story>] stories on the backlog selected by state
       def find_by_state_stories(state)
         current_stories.select{|x| x.current_state == state}
       end
 
-      # 日付以前に作成されたすべてのストーリを返却する
-      # @param date [Date] 日付
-      # @param stories [PivotalTracker::Story] ストーリの配列
-      # @return 日付以前に作成されたすべてのストーリ
+      # Returns all stories created before the date
+      # @param date [Date] the date
+      # @param stories [PivotalTracker::Story] Stories
+      # @return [Array<PivotalTracker::Story>] stories created befor the date
       def total_stories(date, stories)
         stories.select{|story| story.created_at.to_date <= date}
       end
 
-      # 日付以前にAcceptされたすべてのストーリを返却する
-      # @param date [Date] 日付
-      # @param stories [PivotalTracker::Story] ストーリの配列
-      # @return 日付以前にAcceptされたすべてのストーリ
+      # Returns all stories accepted and created before the date
+      # @param date [Date] the date
+      # @param stories [PivotalTracker::Story] Stories
+      # @return [Array<PivotalTracker::Story>] stories accepted and created before the date
       def accepted_stories(date, stories)
         stories.select{|story| (!story.accepted_at.nil? && story.accepted_at.to_date <= date)}
       end
 
-      # ある特定の日付の、ストーリのサイズを返却する
-      # @param date [Date] 日付
-      # @param stories [PivotalTracker::Story] ストーリの配列
-      # @return ある特定の日付の、[総ストーリ数、Acceptedストーリ数, 残りストーリ数] の配列
+      # Returns the report of the story sizes.
+      # @param date [Date] the date
+      # @param stories [PivotalTracker::Story] Stories
+      # @return [Array<Integer,Integer,Integer,Integer>] [Total, Accepted, Todo]
       def aggrigate_story_size_by_date(date, stories)
         total_size = total_stories(date, stories).size
         accepted_size =  accepted_stories(date, stories).size
         [total_size, accepted_size, total_size - accepted_size]
       end
 
-      # 過去にさかのぼった、ストーリ総数と、Accepted数、todoストーリ数を返却する
-      # @param year [Integer] 開始年
-      # @param month [Integer] 開始月
-      # @param date [Integer] 開始日
-      # @return [日付, 総ストーリ数, Acceptedストーリ数, 残りストーリ数]の配列
-      def summrize_stories(year, month, date)
+      # Returns All Story Num, Accepted Num and Todo Num
+      # @param year [Integer] start year
+      # @param month [Integer] start month
+      # @param day [Integer] start day
+      # @return [Array<Date, Integer, Integer,Integer>] [Date, Total, Accepted, Todo]
+      def summrize_stories(year, month, day)
         stories = current_stories
         story_summaries = Array.new
-        (Date.new(year, month, date).. Date.today).each{|current_date|
+        (Date.new(year, month, day).. Date.today).each{|current_date|
           story_summaries << [current_date , aggrigate_story_size_by_date(current_date, stories)].flatten
         }
         story_summaries
       end
-
+      module_function :project_started_at
       module_function :summrize_stories
       module_function :current_stories
     end
