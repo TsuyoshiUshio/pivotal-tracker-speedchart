@@ -93,7 +93,7 @@ module Pivotal
           if (current_date <= Date.today) then
             story_summaries << [current_date , aggrigate_story_size_by_date(current_date, stories)].flatten
           else
-            story_summaries << [current_date , [nil, nil, nil]]
+            story_summaries << [current_date , nil, nil, nil]
           end
         }
         story_summaries

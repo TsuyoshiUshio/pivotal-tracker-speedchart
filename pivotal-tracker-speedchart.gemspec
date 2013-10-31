@@ -24,5 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "spreadsheet"
   spec.add_runtime_dependency "yard"
   spec.add_runtime_dependency "redcarpet"
+  spec.add_runtime_dependency "gruff"
+
 
 end

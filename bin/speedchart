@@ -4,18 +4,19 @@ require "pivotal/tracker/speedchart"
 require "date"
 
 include Pivotal::Tracker::Speedchart
-begin
+#begin
   if ARGV[0].nil?
     create_speed_chart
   else
     to_date = DateTime.parse(ARGV[0])
     create_speed_chart_with_to_date(to_date)
+    create_speed_chart_with_png_to_date(to_date)
   end
-rescue ArgumentError
-  puts "Aborted! Please specify date format"
-  puts "ex. $ speedchart 20130610"
-  exit -1
-end
+#rescue ArgumentError
+#  puts "Aborted! Please specify date format"
+#  puts "ex. $ speedchart 20130610"
+#  exit -1
+#end
 
 create_message_of_speed_chart
 story_state_of_today

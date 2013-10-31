@@ -44,6 +44,30 @@ module Pivotal
         create_excel_by_story_summary(to_date)
       end
 
+      require 'gruff'
+
+      def create_speed_chart_with_png_to_date(to_date = Date.today)
+        g = Gruff::Line.new(4096)
+        g.title = "Speed Chart " + Date.today.to_s
+        #g.labels = {0 => '2013/10/11', 50 => '2013/11/30', 100 => '2013/2/10'}
+
+        stories = summrize_stories(project_started_at, to_date)
+
+        #g.labels = Hash[*stories.map{|x| x[0]}.each_with_index.map{|x,i| [i, x.strftime("%d/%m/%Y")]}.flatten]
+        g.labels = {0 => project_started_at.strftime("%d/%m/%Y"),
+                    (stories.size / 2).round => (project_started_at + ((to_date - project_started_at)/2).round).strftime("%d/%m/%Y"),
+                    (stories.size - 31) => 'a'} # to_date.strftime("%d/%m/%Y")}
+        # プロットのあるところにしか、labelは表示されないご様子
+        puts g.labels.to_s
+        g.data :Total, stories.map{|x| x[1]}
+        g.data :Accepted, stories.map{|x| x[2]}
+        g.data :ToDo, stories.map{|x| x[3]}
+        g.dot_radius = 1
+
+        g.write('speedchart.png')
+
+
+      end
 
       # Shows all story detail on the backlog
       #
