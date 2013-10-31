@@ -34,7 +34,7 @@ Or install it yourself as:
 
     $ speedchart
 
-or If you want to specify the started date, use this.
+or If you want to specify the last date of the speed chart, use this.
 
     $ speedchart 20130610
 

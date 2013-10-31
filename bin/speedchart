@@ -8,8 +8,8 @@ begin
   if ARGV[0].nil?
     create_speed_chart
   else
-    date = DateTime.parse(ARGV[0])
-    create_speed_chart_with_date(date.year, date.month, date.day)
+    to_date = DateTime.parse(ARGV[0])
+    create_speed_chart_with_to_date(to_date)
   end
 rescue ArgumentError
   puts "Aborted! Please specify date format"

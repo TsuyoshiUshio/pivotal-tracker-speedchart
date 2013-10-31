@@ -16,10 +16,8 @@ module Pivotal
 
       # Creates project summary for speed chart
       # generates speed_chart.xls on current directory
-      # @param year [Integer] started year
-      # @param month [Integer] stared month
-      # @param day [Integer] stared day
-      def create_excel_by_story_summary(year, month, day)
+      # @param to_date [Date] the last date of speed chart
+      def create_excel_by_story_summary(to_date = Date.today)
 
         xls_file_name =  'speed_chart.xls'
 
@@ -27,7 +25,7 @@ module Pivotal
         book = Spreadsheet::Workbook.new
         sheet = book.create_worksheet_with_name Date.today.to_s
         sheet.row(0).make_title ["Date", "total", "accepted", "todo"]
-        summrize_stories(year, month, day).each_with_index do |story_summary, i|
+        summrize_stories(project_started_at, to_date).each_with_index do |story_summary, i|
           sheet.row(i+1).add_data story_summary
         end
         book.write xls_file_name
@@ -36,16 +34,14 @@ module Pivotal
       # Generates speed_chart.xls on current directory
       # From the first date of the project to today.
       def create_speed_chart
-        create_excel_by_story_summary(project_started_at.year, project_started_at.month, project_started_at.day)
+        create_excel_by_story_summary
       end
 
       # Generates speed_chart.xls on current directory
-      # Compare with create_speed_chart, you can specify stated date
-      # @param year [Integer] started year
-      # @param month [Integer] started month
-      # @param day [Integer] started day
-      def create_speed_chart_with_date(year, month, day)
-        create_excel_by_story_summary(year, month, day)
+      # Compare with create_speed_chart, you can specify the last day of the speed chart
+      # @param to_date [Date] last date of the speed chart
+      def create_speed_chart_with_to_date(to_date)
+        create_excel_by_story_summary(to_date)
       end
 
 

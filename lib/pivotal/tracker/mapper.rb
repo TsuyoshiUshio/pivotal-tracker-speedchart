@@ -83,15 +83,18 @@ module Pivotal
       end
 
       # Returns All Story Num, Accepted Num and Todo Num
-      # @param year [Integer] start year
-      # @param month [Integer] start month
-      # @param day [Integer] start day
+      # @param from_date [Date] the first date of speed chart
+      # @param to_date [Date] the last date of speed chart
       # @return [Array<Date, Integer, Integer,Integer>] [Date, Total, Accepted, Todo]
-      def summrize_stories(year, month, day)
+      def summrize_stories(from_date, to_date = Date.today)
         stories = current_stories
         story_summaries = Array.new
-        (Date.new(year, month, day).. Date.today).each{|current_date|
-          story_summaries << [current_date , aggrigate_story_size_by_date(current_date, stories)].flatten
+        (from_date .. to_date).each{|current_date|
+          if (current_date <= Date.today) then
+            story_summaries << [current_date , aggrigate_story_size_by_date(current_date, stories)].flatten
+          else
+            story_summaries << [current_date , [nil, nil, nil]]
+          end
         }
         story_summaries
       end
